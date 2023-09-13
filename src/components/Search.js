@@ -21,6 +21,7 @@ export default function Search({ filters, setFilters }) {
   const [department, setDepartment] = useState([]);
   const [functions, setFunctions] = useState([]);
   const [chipData, setChipData] = useState([]);
+  let filtersfiltersLocalStorage = JSON.parse(localStorage.getItem("filters"));
 
   function getLocations() {
     dispatch(getLocation())
@@ -55,42 +56,50 @@ export default function Search({ filters, setFilters }) {
   // add filters
   function selectFilters(e, attribute) {
     const { name, value } = e.target;
+
+    if (filtersfiltersLocalStorage) { filters = filtersfiltersLocalStorage; setFilters(filtersfiltersLocalStorage) };
     // search filter
     if (name === "q") {
+      localStorage.setItem("filters", JSON.stringify({ ...filters, q: e.target.value }));
       setFilters({ ...filters, q: e.target.value });
       return;
     }
     const title = attribute.props.children;
-    let checkDuplicate = chipData.some((item) => item.id === value);
+    let checkDuplicate = chipData.some((item) => item.id === value && item.type === name);
     if (checkDuplicate) {
-      handleDelete({ id: value, title: title });
+      handleDelete({ id: value, title: title, type: name });
       return;
     }
     // deaprtment,location and function filter
     setFilters((prevFilters) => ({
       ...prevFilters,
-      [name]: [...prevFilters[name], { id: value, title: title }],
+      [name]: [...prevFilters[name], { id: value, title: title, type: name }],
     }));
 
-    localStorage.setItem("filters",JSON.stringify({...filters,[name]: [...filters[name], {id:value,title:title}]}))
+    localStorage.setItem("filters", JSON.stringify({ ...filters, [name]: [...filters[name], { id: value, title: title, type: name }] }))
   }
 
   // delete filters individually
   const handleDelete = (chipToDelete) => {
+    if (filtersfiltersLocalStorage) { filters = filtersfiltersLocalStorage; };
     const updatedFilters = { ...filters };
     for (const key in updatedFilters) {
       if (Array.isArray(updatedFilters[key])) {
         updatedFilters[key] = updatedFilters[key].filter(
-          (chip) => chip.id !== chipToDelete.id
+          (chip) => chip.id !== chipToDelete.id || chip.type !== chipToDelete.type
         );
       }
     }
     setFilters(updatedFilters);
+    localStorage.setItem("filters", JSON.stringify(updatedFilters));
+
   };
 
   // delete all filters
   function clearAll() {
-    setFilters({ q: "", loc: [], dept: [], fun: [] });
+    let filter = { q: "", loc: [], dept: [], fun: [] };
+    setFilters(filter);
+    localStorage.setItem("filters", JSON.stringify(filter));
   }
 
   useEffect(() => {
@@ -101,6 +110,7 @@ export default function Search({ filters, setFilters }) {
 
   useEffect(() => {
     let arr = [];
+    if (filtersfiltersLocalStorage) { filters = filtersfiltersLocalStorage; };
     for (const key in filters) {
       if (Array.isArray(filters[key])) {
         arr.push(...filters[key]);
@@ -198,6 +208,8 @@ export default function Search({ filters, setFilters }) {
           <Paper
             sx={{
               display: "flex",
+              padding:  "5px",
+              margin:  "5px",
               flexDirection: "row", // Display chips from left to right
               flexWrap: "wrap", // Allow chips to wrap to a new line
               alignItems: "center", // Vertically center items
@@ -214,7 +226,7 @@ export default function Search({ filters, setFilters }) {
                 return (
                   <span
                     key={item.id}
-                    style={{ marginRight: "8px", marginBottom: "8px" }}
+                    style={{ margin: "5px" }}
                   >
                     <Chip
                       icon={icon}

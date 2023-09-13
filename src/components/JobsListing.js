@@ -45,7 +45,7 @@ export default function JobsListing({ filters }) {
   }, [filters]);
   return (
     <div style={{ paddingLeft: "350px", paddingRight: "350px" }}>
-      {allJobs.map((item) => (
+      {allJobs && allJobs.length ? allJobs.map((item) => (
         <div key={item.department}>
           <h2 style={{ textAlign: "left", paddingLeft: "16px" }}>
             <span style={{ borderBottom: "3px solid #6495ED" }}>
@@ -57,25 +57,17 @@ export default function JobsListing({ filters }) {
               <ListItem style={{ height: "80px" }} key={job.id}>
                 <ListItemText
                   style={{ paddingTop: "0px", paddingBottom: "0px" }}
-                  primary={<h4 style={{ marginBottom: "4px" }}>{job.title}</h4>}
+                  primary={<h4 style={{ marginBottom: "4px",marginBottom: "4px" }}>{job.title}</h4>}
                   secondary={
-                    <React.Fragment>
-                      <p
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          marginTop: "10px",
-                        }}
-                      >
-                        <ApartmentIcon fontSize="small" />
-                        &nbsp;
-                        <span>{job?.department?.title} </span> &nbsp; &nbsp;
-                        <FmdGoodIcon fontSize="small" />
-                        &nbsp;
-                        <span>{job?.location?.city}</span>,
-                        {job?.location?.state}{" "}
-                      </p>
-                    </React.Fragment>
+                    <div style={{ display: "flex", alignItems: "center", marginTop: "10px" }}>
+                      <ApartmentIcon fontSize="small" />
+                      &nbsp;
+                      <span>{job?.department?.title} </span> &nbsp; &nbsp;
+                      <FmdGoodIcon fontSize="small" />
+                      &nbsp;
+                      <span>{job?.location?.city}</span>, {job?.location?.state}
+                      <Chip style={{ marginLeft: "10px", borderRadius: "0px" }} label={job?.type} />
+                    </div>
                   }
                 />
                 <ListItemSecondaryAction>
@@ -91,7 +83,6 @@ export default function JobsListing({ filters }) {
 
                   <Link
                     href={`/jobDetail/${job.id}`}
-                    target="_blank"
                     rel="noopener noreferrer"
                   >
                     <Button color="secondary">View</Button>
@@ -101,7 +92,7 @@ export default function JobsListing({ filters }) {
             ))}
           </List>
         </div>
-      ))}
+      )):<h3>No Current Openings</h3>}
     </div>
   );
 }

@@ -34,7 +34,7 @@ export default function Detail() {
 
   useEffect(() => {
     getjobsData();
-  }, []);
+  }, [id]);
   useEffect(() => {
     otherJobOpenings();
   }, [jobData]);

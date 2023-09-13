@@ -1,8 +1,8 @@
 import React from "react";
 import FacebookRoundedIcon from "@mui/icons-material/FacebookRounded";
 
-export default function ShareJob() {
-  let url = "https://google.com";
+export default function ShareJob({jobUrl}) {
+  let url = jobUrl;
   const shareOnFacebook = () => {
     const facebookShareURL = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
       url
@@ -30,10 +30,10 @@ export default function ShareJob() {
           SHARE JOB OPENINGS
         </span>
       </h3>
-      <span style={{ padding: "5px" }}>
+      <span style={{ padding: "5px", cursor:"pointer" }}>
         <FacebookRoundedIcon target="__blank" onClick={shareOnFacebook} />
       </span>
-      <span style={{ padding: "5px" }}>
+      <span style={{ padding: "5px", cursor:"pointer" }}>
         <svg
           onClick={shareOnTwitter}
           xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +48,7 @@ export default function ShareJob() {
           />
         </svg>
       </span>
-      <span style={{ padding: "5px" }}>
+      <span style={{ padding: "5px", cursor:"pointer" }}>
         <svg
           onClick={shareOnLinkedIn}
           xmlns="http://www.w3.org/2000/svg"

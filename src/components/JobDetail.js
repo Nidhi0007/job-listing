@@ -4,62 +4,78 @@ import {
   ListItem,
   ListItemText,
   Button,
-  Link,
   Chip,
   CardContent,
   Card,
 } from "@mui/material";
+import { Link } from "react-router-dom";
 import ApartmentIcon from "@mui/icons-material/Apartment";
 import FmdGoodIcon from "@mui/icons-material/FmdGood";
 import ShareJob from "./ShareJob";
 export default function JobDetail({ jobData, otherJobs }) {
   return (
     <List>
-      <ListItem key={jobData.id}>
+      <ListItem key={jobData?.id}>
         <ListItemText
           style={{ paddingTop: "0px", paddingBottom: "0px" }}
           primary={
-            <h2 style={{ textAlign: "left", marginBottom: "4px" }}>
-              <span>{jobData.title}</span>
-            </h2>
-          }
-          secondary={
-            <React.Fragment>
+            <>
+              <div>
+                <h5 style={{ textAlign: "left", marginBottom: "0px" }}>
+                  {jobData?.department?.title} Department At {jobData?.company}
+                </h5>
+                <h2
+                  style={{
+                    textAlign: "left",
+                    marginBottom: "4px",
+                    marginTop: "0px",
+                  }}
+                >
+                  <span>{jobData?.title}</span>
+                </h2>
+              </div>
               <div
                 style={{
-                  padding: "10px",
+                  display: "flex",
+                  alignItems: "center",
+                  marginTop: "0px",
+                }}
+              >
+                <ApartmentIcon fontSize="small" />
+                &nbsp;
+                <span>{jobData?.department?.title} </span> &nbsp; &nbsp;
+                <FmdGoodIcon fontSize="small" />
+                &nbsp;
+                <span>{jobData?.location?.city}</span>,{" "}
+                {jobData?.location?.state}{" "}
+                <Chip
+                  style={{ marginLeft: "10px", borderRadius: "0px" }}
+                  label={jobData?.type}
+                />
+              </div>
+            </>
+          }
+          secondary={
+            <>
+              <div
+                style={{
+                  paddingTop: "20px",
+                  paddingBottom: "20px",
                   borderBottom: "1px solid #6495ED",
                 }}
               >
-                <p style={{ display: "flex", alignItems: "center" }}>
-                  <ApartmentIcon fontSize="small" />
-                  &nbsp;
-                  <span>{jobData?.department?.title} </span> &nbsp; &nbsp;
-                  <FmdGoodIcon fontSize="small" />
-                  &nbsp;
-                  <span>{jobData?.location?.city}</span>,
-                  {jobData?.location?.state}{" "}
-                  <Chip
-                    style={{ marginLeft: "10px", borderRadius: "0px" }}
-                    label={jobData?.type}
-                  />
-                </p>
-                <Link
-                  href={jobData.applyUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href={jobData?.applyUrl} rel="noopener noreferrer">
                   <Button
                     style={{ borderRadius: "50px", width: "125px" }}
                     variant="contained"
                   >
                     Apply
                   </Button>
-                </Link>
+                </a>
               </div>
               <div style={{ display: "flex" }}>
                 <div
-                  dangerouslySetInnerHTML={{ __html: jobData.description }}
+                  dangerouslySetInnerHTML={{ __html: jobData?.description }}
                 />
                 <div>
                   <Card
@@ -75,7 +91,13 @@ export default function JobDetail({ jobData, otherJobs }) {
                       <List>
                         {otherJobs.map((job) => (
                           <ListItem
-                            style={{ height: "80px", paddingLeft: "0px", marginBottom:"20px" }}
+                            component={Link}
+                            to={`/jobDetail/${job.id}`}
+                            style={{
+                              height: "80px",
+                              paddingLeft: "0px",
+                              marginBottom: "20px",
+                            }}
                             key={job.id}
                           >
                             <ListItemText
@@ -84,29 +106,31 @@ export default function JobDetail({ jobData, otherJobs }) {
                                 paddingBottom: "0px",
                               }}
                               primary={
-                                <h4 style={{ marginBottom: "4px" }}>
+                                <h4
+                                  style={{
+                                    marginBottom: "4px",
+                                    color: "black",
+                                  }}
+                                >
                                   {job.title}
                                 </h4>
                               }
                               secondary={
-                                <React.Fragment>
-                                  <p
-                                    style={{
-                                      display: "flex",
-                                      alignItems: "center",
-                                      marginTop:"10px"
-                                    }}
-                                  >
-                                    <ApartmentIcon fontSize="small" />
-                                    &nbsp;
-                                    <span>{job?.department?.title} </span>{" "}
-                                    &nbsp; &nbsp;
-                                    <FmdGoodIcon fontSize="small" />
-                                    &nbsp;
-                                    <span>{job?.location?.city}</span>,
-                                    {job?.location?.state}{" "}
-                                  </p>
-                                </React.Fragment>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    marginTop: "10px",
+                                  }}
+                                >
+                                  <ApartmentIcon fontSize="small" />
+                                  <span>{job?.department?.title}</span>
+                                  <FmdGoodIcon fontSize="small" />
+                                  <span>
+                                    {job?.location?.city},{" "}
+                                    {job?.location?.state}
+                                  </span>
+                                </div>
                               }
                             />
                           </ListItem>
@@ -114,10 +138,10 @@ export default function JobDetail({ jobData, otherJobs }) {
                       </List>
                     </CardContent>
                   </Card>
-                  <ShareJob />
+                  <ShareJob jobUrl={jobData?.hostedUrl} />
                 </div>
               </div>
-            </React.Fragment>
+            </>
           }
         />
       </ListItem>
