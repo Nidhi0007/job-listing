@@ -64,7 +64,11 @@ export default function JobDetail({ jobData, otherJobs }) {
                   borderBottom: "1px solid #6495ED",
                 }}
               >
-                <a href={jobData?.applyUrl} rel="noopener noreferrer">
+                <a
+                  href={jobData?.applyUrl}
+                  target="__blank"
+                  rel="noopener noreferrer"
+                >
                   <Button
                     style={{ borderRadius: "50px", width: "125px" }}
                     variant="contained"
@@ -124,12 +128,13 @@ export default function JobDetail({ jobData, otherJobs }) {
                                   }}
                                 >
                                   <ApartmentIcon fontSize="small" />
-                                  <span>{job?.department?.title}</span>
+                                  &nbsp;
+                                  <span>{job?.department?.title} </span> &nbsp;
+                                  &nbsp;
                                   <FmdGoodIcon fontSize="small" />
-                                  <span>
-                                    {job?.location?.city},{" "}
-                                    {job?.location?.state}
-                                  </span>
+                                  &nbsp;
+                                  <span>{job?.location?.city}</span>,{" "}
+                                  {job?.location?.state}{" "}
                                 </div>
                               }
                             />
